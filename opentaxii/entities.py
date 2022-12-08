@@ -18,14 +18,20 @@ class Account:
         self.details = details
 
     def can_read(self, collection_name):
-        return (
-            self.is_admin or
-            self.permissions.get(collection_name) in ('read', 'modify'))
+        _permission = self.permissions.get(collection_name)
+        if isinstance(_permission, (list, set)):
+            return 'read' in _permission
+        if isinstance(_permission, str):
+            return _permission in ('read', 'modify')
+        return self.is_admin
 
     def can_modify(self, collection_name):
-        return (
-            self.is_admin or
-            self.permissions.get(collection_name) == 'modify')
+        _permission = self.permissions.get(collection_name)
+        if isinstance(_permission, (list, set)):
+            return 'write' in _permission
+        if isinstance(_permission, str):
+            return _permission == 'modify'
+        return self.is_admin
 
     def __repr__(self):
         return (

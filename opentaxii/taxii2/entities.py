@@ -64,19 +64,13 @@ class Collection(Entity):
     def can_read(self, account: Optional[Account]):
         """Determine if `account` is allowed to read from this collection."""
         return self.is_public or (
-            account
-            and (
-                account.is_admin or "read" in set(account.permissions.get(self.id, []))
-            )
+            account and account.can_read(self.id)
         )
 
     def can_write(self, account: Optional[Account]):
         """Determine if `account` is allowed to write to this collection."""
         return self.is_public_write or (
-            account
-            and (
-                account.is_admin or "write" in set(account.permissions.get(self.id, []))
-            )
+            account and account.can_modify(self.id)
         )
 
 

@@ -12,7 +12,7 @@ __all__ = ['Base', 'Account']
 Base = declarative_base()
 
 MAX_STR_LEN = 256
-ALL_PERMISSIONS = ['read', 'modify']
+ALL_PERMISSIONS = ['read', 'modify', 'write']
 
 
 class Account(Base):
@@ -40,7 +40,11 @@ class Account(Base):
     @permissions.setter
     def permissions(self, permissions):
         for collection_name, permission in permissions.items():
-            if permission not in ALL_PERMISSIONS:
+            if isinstance(permission, str) and permission not in ALL_PERMISSIONS:
+                raise ValueError(
+                    "Unknown permission '{}' specified for collection '{}'"
+                    .format(permission, collection_name))
+            if isinstance(permission, (list, set)) and any(perm not in ALL_PERMISSIONS for perm in permission):
                 raise ValueError(
                     "Unknown permission '{}' specified for collection '{}'"
                     .format(permission, collection_name))
