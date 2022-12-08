@@ -18,7 +18,7 @@ class Account:
         self.details = details
 
     def can_read(self, collection_name):
-        _permission = self.permissions.get(collection_name)
+        _permission = self.permissions.get(str(collection_name))
         if isinstance(_permission, (list, set)):
             return 'read' in _permission
         if isinstance(_permission, str):
@@ -26,7 +26,7 @@ class Account:
         return self.is_admin
 
     def can_modify(self, collection_name):
-        _permission = self.permissions.get(collection_name)
+        _permission = self.permissions.get(str(collection_name))
         if isinstance(_permission, (list, set)):
             return 'write' in _permission
         if isinstance(_permission, str):
