@@ -1,4 +1,3 @@
-
 class Account:
     '''Represents Account entity.
 
@@ -19,19 +18,23 @@ class Account:
 
     def can_read(self, collection_name):
         _permission = self.permissions.get(str(collection_name))
+        if self.is_admin:
+            return self.is_admin
         if isinstance(_permission, (list, set)):
             return 'read' in _permission
         if isinstance(_permission, str):
             return _permission in ('read', 'modify')
-        return self.is_admin
+        return False
 
     def can_modify(self, collection_name):
         _permission = self.permissions.get(str(collection_name))
+        if self.is_admin:
+            return self.is_admin
         if isinstance(_permission, (list, set)):
             return 'write' in _permission
         if isinstance(_permission, str):
             return _permission == 'modify'
-        return self.is_admin
+        return False
 
     def __repr__(self):
         return (
